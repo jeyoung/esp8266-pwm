@@ -25,6 +25,11 @@ static os_timer_t timer;
 static volatile int variable_duty_cycle = MAX_DUTY_CYCLE;
 static volatile int duty_cycle_step = -10000;
 
+int duty_cycle_out_of_bounds()
+{
+	return (variable_duty_cycle < 0 || variable_duty_cycle > MAX_DUTY_CYCLE);
+}
+
 void reverse_duty_cycle_step()
 {
 	duty_cycle_step *= -1;
@@ -33,7 +38,8 @@ void reverse_duty_cycle_step()
 void change_duty_cycle()
 {
 	variable_duty_cycle += duty_cycle_step;
-	if (variable_duty_cycle < 0 || variable_duty_cycle > MAX_DUTY_CYCLE)
+
+	if (duty_cycle_out_of_bounds())
 		reverse_duty_cycle_step();
 
 	if (variable_duty_cycle < 0)
